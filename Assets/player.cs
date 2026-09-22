@@ -88,7 +88,7 @@ public class player : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D c)
     {
-        if (c.gameObject.GetComponent<eNemy>() != null || c.gameObject.GetComponent<eNemy2>() != null)
+        if (c.gameObject.GetComponent<eNemy>() != null)
         {
             hp = hp - 4;
             var g = GameObject.FindObjectOfType<gm>();
