@@ -56,29 +56,33 @@ public class player : MonoBehaviour
 
     void shoot()
     {
-        try
+        if (prefab == null)
         {
-            var b = Instantiate(prefab, transform.position, Quaternion.identity);
-            b.transform.parent = null;
+            Debug.LogError("player.prefab is not assigned — drag a bullet prefab in the Inspector");
+            return;
         }
-        catch
+
+        var b = Instantiate(prefab, transform.position, Quaternion.identity);
+        b.name = "bullet";
+
+        var rb = b.GetComponent<Rigidbody2D>();
+        if (rb == null) rb = b.AddComponent<Rigidbody2D>();
+        rb.gravityScale = 0f;
+        rb.linearVelocity = new Vector2(lastDir * 12f, lastDir);
+
+        var col = b.GetComponent<Collider2D>();
+        if (col == null)
         {
-            GameObject b = new GameObject("bullet");
-            b.transform.position = transform.position;
-            b.transform.parent = null;
-            var sr = b.AddComponent<SpriteRenderer>();
-            var my = GetComponent<SpriteRenderer>();
-            if (my != null) sr.sprite = my.sprite;
-            sr.color = new Color(1f, 1f, 0.2f, 1f);
-            sr.sortingOrder = 10;
-            var rb = b.AddComponent<Rigidbody2D>();
-            rb.gravityScale = 0f;
-            rb.linearVelocity = new Vector2(lastDir * 12f, 0f);
-            var col = b.AddComponent<CircleCollider2D>();
+            var circle = b.AddComponent<CircleCollider2D>();
+            circle.isTrigger = true;
+            circle.radius = 0.12f;
+        }
+        else
+        {
             col.isTrigger = true;
-            col.radius = 0.12f;
-            Destroy(b, 1.6f);
         }
+
+        Destroy(b, 1.6f);
     }
 
     void OnCollisionEnter2D(Collision2D c)

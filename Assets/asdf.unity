@@ -860,7 +860,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::player
   speed: 5.5
   hp: 37
-  prefab: {fileID: 0}
+  prefab: {fileID: 8110000001000000001, guid: 9f3c2a1b8e7640d2a6c5b4e3d2f1a0b9, type: 3}
   fireWait: 0.18
   hud: {fileID: 0}
 --- !u!58 &1675413615
