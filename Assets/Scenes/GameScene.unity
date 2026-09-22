@@ -212,9 +212,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61fc0aa7bf3324578bfad2f731183b8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HudStuff
-  txt: {fileID: 718910745}
-  txt2: {fileID: 898845752}
-  last: 
+  _healthText: {fileID: 0}
+  _scoreText: {fileID: 0}
 --- !u!114 &492487438
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -538,7 +537,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &685063385
 RectTransform:
   m_ObjectHideFlags: 0
@@ -555,7 +554,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -4}
+  m_AnchoredPosition: {x: 0, y: -5}
   m_SizeDelta: {x: 32, y: 32}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &685063386
@@ -833,6 +832,52 @@ MonoBehaviour:
   m_PointerBehavior: 0
   m_CursorLockBehavior: 0
   m_ScrollDeltaPerTick: 6
+--- !u!1 &1648860762
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1648860764}
+  - component: {fileID: 1648860763}
+  m_Layer: 0
+  m_Name: HudStuff
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1648860763
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1648860762}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61fc0aa7bf3324578bfad2f731183b8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HudStuff
+  _healthText: {fileID: 718910745}
+  _scoreText: {fileID: 898845752}
+--- !u!4 &1648860764
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1648860762}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1675413613
 GameObject:
   m_ObjectHideFlags: 0
@@ -865,11 +910,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b88034748bf464c06a0279995ea88f10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::player
-  _speed: 5.5
   Health: 37
+  _speed: 5.5
   _bulletPrefab: {fileID: 0}
-  fireWait: 0.18
-  hud: {fileID: 0}
+  _shootCooldown: 0.2
 --- !u!58 &1675413615
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -1036,18 +1080,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2469cb9b11084cd396ca062c6571caa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::gm
-  enemyPrefab: {fileID: 1922327454384054408, guid: cbe7ef482f5df4ede9583e0d0700a14a, type: 3}
-  prefab2: {fileID: 0}
-  spawnEvery: 1.337
-  score: 0
-  HP: 37
-  paused: 0
-  hpTxt: {fileID: 718910745}
-  scoreTxt: {fileID: 898845752}
-  hud: {fileID: 492487437}
-  t: 0
-  wave: 1
-  gameOver: 0
+  _spawnCooldown: 1.5
+  _player: {fileID: 1675413614}
+  _enemyPrefab: {fileID: 1922327454384054408, guid: cbe7ef482f5df4ede9583e0d0700a14a, type: 3}
 --- !u!4 &1960761867
 Transform:
   m_ObjectHideFlags: 0
@@ -1074,3 +1109,4 @@ SceneRoots:
   - {fileID: 492487441}
   - {fileID: 1481512432}
   - {fileID: 1960761867}
+  - {fileID: 1648860764}

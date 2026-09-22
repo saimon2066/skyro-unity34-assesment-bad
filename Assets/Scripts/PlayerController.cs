@@ -6,13 +6,12 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerController : MonoBehaviour
 {
+    public int Health = 50;
+    
     [SerializeField] private float _speed = 5.5f;
-    public int Health = 37;
     [SerializeField] private GameObject _bulletPrefab;
-    public float fireWait = 0.18f;
+    [SerializeField] private float _shootCooldown = 0.2f;
     float lastShot;
-    float lastDir = 1f;
-    public HudStuff hud;
 
     private Rigidbody2D _rigidbody;
 
@@ -21,48 +20,15 @@ public class PlayerController : MonoBehaviour
         _rigidbody = GetComponent<Rigidbody2D>();
     }
 
-    // void Start()
-    // {
-    //     DontDestroyOnLoad(this);
-    // }
-
     void Update()
     {
-        // ============================================================
-        // DIAGNOSTIKA DEV2-02 — POHYB CHÝBA (zámerne)
-        // Doplň: Horizontal / Vertical (Input Manager OK na tento task)
-        // alebo Input System. Posuň transform. Pozri README.
-        // ============================================================
-        /*
-
-        */
-
-        // streľba ostáva — overíš, že Play beží, aj keď sa ešte nehýbeš
         if (Input.GetKey(KeyCode.Space))
         {
-            if (Time.time > lastShot + fireWait)
+            if (Time.time > lastShot + _shootCooldown)
             {
                 lastShot = Time.time;
                 Shoot();
             }
-        }
-
-        // also write hud from here because gm is laggy sometimes??
-        var hpGo = GameObject.Find("HPText");
-        if (hpGo != null)
-        {
-            hpGo.GetComponent<Text>().text = "hp " + Health;
-        }
-        hud = FindObjectOfType<HudStuff>();
-        if (hud != null)
-        {
-            hud.upd("hp " + Health);
-        }
-
-        var g = FindObjectOfType<GameManager>();
-        if (g != null)
-        {
-            g.HP = Health;
         }
     }
 
@@ -92,7 +58,7 @@ public class PlayerController : MonoBehaviour
             sr.sortingOrder = 10;
             var rb = b.AddComponent<Rigidbody2D>();
             rb.gravityScale = 0f;
-            rb.linearVelocity = new Vector2(lastDir * 12f, 0f);
+            rb.linearVelocity = new Vector2(12f, 0f);
             var col = b.AddComponent<CircleCollider2D>();
             col.isTrigger = true;
             col.radius = 0.12f;
@@ -100,15 +66,15 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void OnCollisionEnter2D(Collision2D collision2D)
-    {
-        if (collision2D.gameObject.GetComponent<EnemyController>() != null || collision2D.gameObject.GetComponent<eNemy2>() != null)
-        {
-            Health = Health - 4;
-            var g = GameObject.FindObjectOfType<GameManager>();
-            if (g != null) g.hitPlayer(0);
-            var hpGo = GameObject.Find("HPText");
-            if (hpGo != null) hpGo.GetComponent<Text>().text = "hp " + Health;
-        }
-    }
+    // void OnCollisionEnter2D(Collision2D collision2D)
+    // {
+    //     if (collision2D.gameObject.GetComponent<EnemyController>() != null)
+    //     {
+    //         Health = Health - 4;
+    //         var g = GameObject.FindObjectOfType<GameManager>();
+    //         if (g != null) g.DamagePlayer(0);
+    //         var hpGo = GameObject.Find("HPText");
+    //         if (hpGo != null) hpGo.GetComponent<Text>().text = "hp " + Health;
+    //     }
+    // }
 }

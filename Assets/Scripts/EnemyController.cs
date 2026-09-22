@@ -3,9 +3,9 @@ using UnityEngine;
 public class EnemyController : MonoBehaviour
 {
     [SerializeField] private int _damage;
-    public float speed = 2.4f;
-    public int hp = 3;
-    float _attackCooldown;
+    [SerializeField] private float _speed = 2.4f;
+    private int _health = 3;
+    private float _attackCooldown;
 
     void Update()
     {
@@ -16,7 +16,7 @@ public class EnemyController : MonoBehaviour
         }
         if (p != null)
         {
-            transform.position = Vector3.MoveTowards(transform.position, p.transform.position, speed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, p.transform.position, _speed * Time.deltaTime);
         }
     }
 
@@ -29,20 +29,21 @@ public class EnemyController : MonoBehaviour
             if (Time.time < _attackCooldown) return;
             _attackCooldown = Time.time + 0.4f;
             var g = FindObjectOfType<GameManager>();
-            if (g != null) g.hitPlayer(7);
+            if (g != null) g.DamagePlayer(7);
         }
 
         if (other.gameObject.name == "bullet" || other.gameObject.name.Contains("bullet"))
         {
-            hp = hp - 1;
+            _health = _health - 1;
             Destroy(other.gameObject);
-            if (hp <= 0)
+            if (_health <= 0)
             {
                 // ============================================================
                 // DIAGNOSTIKA DEV2-05 — SKÓRE NENAPOJENÉ (zámerne)
                 // Po opravenej kolízii (DEV2-03) enemy zomrie, ale score
                 // nerastie, kým nezavoláš gm.addScore / napojíš ScoreText.
                 // ============================================================
+                GameManager.Instance.AddScore(10);
                 Destroy(gameObject);
             }
         }
@@ -57,7 +58,7 @@ public class EnemyController : MonoBehaviour
                 return;
             }
             _attackCooldown = Time.time + 0.55f;
-            GameManager.Instance.hitPlayer(_damage);
+            GameManager.Instance.DamagePlayer(_damage);
         }
     }
 }

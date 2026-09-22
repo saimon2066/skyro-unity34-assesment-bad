@@ -169,5 +169,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be72e30c2c0014e90855736585b3f015, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::eNemy
-  speed: 2.4
-  hp: 3
+  _damage: 1
+  _speed: 2.4
