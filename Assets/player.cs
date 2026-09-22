@@ -24,9 +24,11 @@ public class player : MonoBehaviour
         // Doplň: Horizontal / Vertical (Input Manager OK na tento task)
         // alebo Input System. Posuň transform. Pozri README.
         // ============================================================
-        /*
+        float h = Input.GetAxis("Horizontal");
+        float v = Input.GetAxis("Vertical");
+        if (Mathf.Abs(h) > 0.01f) lastDir = Mathf.Sign(h);
 
-        */
+        transform.position += new Vector3(h, v, 0) * speed * Time.deltaTime;
 
         // streľba ostáva — overíš, že Play beží, aj keď sa ešte nehýbeš
         if (Input.GetKey(KeyCode.Space))
