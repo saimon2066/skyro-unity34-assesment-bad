@@ -8,7 +8,6 @@ public class player : MonoBehaviour
     public GameObject prefab;
     public float fireWait = 0.18f;
     float lastShot;
-    float lastDir = 1f;
     public HudStuff hud;
 
     void Start()
@@ -21,7 +20,6 @@ public class player : MonoBehaviour
     {
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
-        if (Mathf.Abs(h) > 0.01f) lastDir = Mathf.Sign(h);
 
         transform.position += new Vector3(h, v, 0) * speed * Time.deltaTime;
 
@@ -62,13 +60,19 @@ public class player : MonoBehaviour
             return;
         }
 
+        Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        mouseWorld.z = 0f;
+        Vector2 aim = ((Vector2)(mouseWorld - transform.position)).normalized;
+        if (aim.sqrMagnitude < 0.0001f)
+            aim = Vector2.right;
+
         var b = Instantiate(prefab, transform.position, Quaternion.identity);
         b.name = "bullet";
 
         var rb = b.GetComponent<Rigidbody2D>();
         if (rb == null) rb = b.AddComponent<Rigidbody2D>();
         rb.gravityScale = 0f;
-        rb.linearVelocity = new Vector2(lastDir * 12f, lastDir);
+        rb.linearVelocity = aim * 12f;
 
         var col = b.GetComponent<Collider2D>();
         if (col == null)
