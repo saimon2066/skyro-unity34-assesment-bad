@@ -1,17 +1,18 @@
 using UnityEngine;
 
-public class eNemy : MonoBehaviour
+public class EnemyController : MonoBehaviour
 {
+    [SerializeField] private int _damage;
     public float speed = 2.4f;
     public int hp = 3;
-    float hitCd;
+    float _attackCooldown;
 
     void Update()
     {
         var p = GameObject.Find("player");
         if (p == null)
         {
-            p = FindObjectOfType<player>() != null ? FindObjectOfType<player>().gameObject : null;
+            p = FindObjectOfType<PlayerController>() != null ? FindObjectOfType<PlayerController>().gameObject : null;
         }
         if (p != null)
         {
@@ -23,11 +24,11 @@ public class eNemy : MonoBehaviour
     {
         if (other == null) return;
 
-        if (other.gameObject.name == "player" || other.GetComponent<player>() != null)
+        if (other.gameObject.name == "player" || other.GetComponent<PlayerController>() != null)
         {
-            if (Time.time < hitCd) return;
-            hitCd = Time.time + 0.4f;
-            var g = FindObjectOfType<gm>();
+            if (Time.time < _attackCooldown) return;
+            _attackCooldown = Time.time + 0.4f;
+            var g = FindObjectOfType<GameManager>();
             if (g != null) g.hitPlayer(7);
         }
 
@@ -49,12 +50,14 @@ public class eNemy : MonoBehaviour
 
     void OnTriggerStay2D(Collider2D other)
     {
-        if (other != null && other.GetComponent<player>() != null)
+        if (other.TryGetComponent(out PlayerController playerController))
         {
-            if (Time.time < hitCd) return;
-            hitCd = Time.time + 0.55f;
-            var g = FindObjectOfType<gm>();
-            if (g != null) g.hitPlayer(3);
+            if (Time.time < _attackCooldown)
+            {
+                return;
+            }
+            _attackCooldown = Time.time + 0.55f;
+            GameManager.Instance.hitPlayer(_damage);
         }
     }
 }

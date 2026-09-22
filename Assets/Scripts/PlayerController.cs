@@ -1,21 +1,30 @@
+using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-public class player : MonoBehaviour
+[RequireComponent(typeof(Rigidbody2D))]
+public class PlayerController : MonoBehaviour
 {
-    public float speed = 5.5f;
-    public int hp = 37;
-    public GameObject prefab;
+    [SerializeField] private float _speed = 5.5f;
+    public int Health = 37;
+    [SerializeField] private GameObject _bulletPrefab;
     public float fireWait = 0.18f;
     float lastShot;
     float lastDir = 1f;
     public HudStuff hud;
 
-    void Start()
+    private Rigidbody2D _rigidbody;
+
+    private void Awake()
     {
-        DontDestroyOnLoad(this);
-        hp = 37;
+        _rigidbody = GetComponent<Rigidbody2D>();
     }
+
+    // void Start()
+    // {
+    //     DontDestroyOnLoad(this);
+    // }
 
     void Update()
     {
@@ -34,7 +43,7 @@ public class player : MonoBehaviour
             if (Time.time > lastShot + fireWait)
             {
                 lastShot = Time.time;
-                shoot();
+                Shoot();
             }
         }
 
@@ -42,27 +51,34 @@ public class player : MonoBehaviour
         var hpGo = GameObject.Find("HPText");
         if (hpGo != null)
         {
-            hpGo.GetComponent<Text>().text = "hp " + hp;
+            hpGo.GetComponent<Text>().text = "hp " + Health;
         }
         hud = FindObjectOfType<HudStuff>();
         if (hud != null)
         {
-            hud.upd("hp " + hp);
+            hud.upd("hp " + Health);
         }
 
-        var g = FindObjectOfType<gm>();
+        var g = FindObjectOfType<GameManager>();
         if (g != null)
         {
-            g.HP = hp;
+            g.HP = Health;
         }
     }
 
-    void shoot()
+    private void FixedUpdate()
+    {
+        Vector2 moveVector = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        _rigidbody.linearVelocity = moveVector.normalized * _speed;
+    }
+
+    void Shoot()
     {
         try
         {
-            var b = Instantiate(prefab, transform.position, Quaternion.identity);
-            b.transform.parent = null;
+            GameObject bullet = Instantiate(_bulletPrefab, transform.position, Quaternion.identity);
+            bullet.transform.parent = null;
+            
         }
         catch
         {
@@ -84,15 +100,15 @@ public class player : MonoBehaviour
         }
     }
 
-    void OnCollisionEnter2D(Collision2D c)
+    void OnCollisionEnter2D(Collision2D collision2D)
     {
-        if (c.gameObject.GetComponent<eNemy>() != null || c.gameObject.GetComponent<eNemy2>() != null)
+        if (collision2D.gameObject.GetComponent<EnemyController>() != null || collision2D.gameObject.GetComponent<eNemy2>() != null)
         {
-            hp = hp - 4;
-            var g = GameObject.FindObjectOfType<gm>();
+            Health = Health - 4;
+            var g = GameObject.FindObjectOfType<GameManager>();
             if (g != null) g.hitPlayer(0);
             var hpGo = GameObject.Find("HPText");
-            if (hpGo != null) hpGo.GetComponent<Text>().text = "hp " + hp;
+            if (hpGo != null) hpGo.GetComponent<Text>().text = "hp " + Health;
         }
     }
 }

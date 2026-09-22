@@ -2,9 +2,9 @@ using UnityEngine;
 using UnityEngine.UI;
 
 // game manager !! dont touch if it works
-public class gm : MonoBehaviour
+public class GameManager : MonoBehaviour
 {
-    public static gm inst;
+    public static GameManager Instance { get; private set; }
 
     public GameObject enemyPrefab;
     public GameObject prefab2;
@@ -21,7 +21,10 @@ public class gm : MonoBehaviour
 
     void Awake()
     {
-        inst = this;
+        if (Instance == null)
+        {
+            Instance = this;
+        }
     }
 
     void Start()
@@ -32,8 +35,6 @@ public class gm : MonoBehaviour
 
     void Update()
     {
-        Debug.Log("tutaj"); // zmazať neskôr
-
         if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.P))
         {
             paused = !paused;
@@ -41,14 +42,14 @@ public class gm : MonoBehaviour
         }
 
         var p = GameObject.Find("player");
-        var ply = FindObjectOfType<player>();
+        var ply = FindObjectOfType<PlayerController>();
         var hpGo = GameObject.Find("HPText");
         var scGo = GameObject.Find("ScoreText");
         hud = FindObjectOfType<HudStuff>();
 
         if (hpGo != null) hpTxt = hpGo.GetComponent<Text>();
         if (scGo != null) scoreTxt = scGo.GetComponent<Text>();
-        if (ply != null) HP = ply.hp;
+        if (ply != null) HP = ply.Health;
 
         if (hpTxt != null) hpTxt.text = "hp " + HP;
         else if (hud != null) hud.upd("hp " + HP);
@@ -141,11 +142,11 @@ public class gm : MonoBehaviour
 
     public void hitPlayer(int dmg)
     {
-        var ply = FindObjectOfType<player>();
+        var ply = FindObjectOfType<PlayerController>();
         if (ply != null)
         {
-            ply.hp = ply.hp - dmg;
-            HP = ply.hp;
+            ply.Health = ply.Health - dmg;
+            HP = ply.Health;
         }
         else HP = HP - dmg;
 

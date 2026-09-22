@@ -11,7 +11,7 @@ public class eNemy2 : MonoBehaviour
         var p = GameObject.Find("player");
         if (p == null)
         {
-            p = FindObjectOfType<player>() != null ? FindObjectOfType<player>().gameObject : null;
+            p = FindObjectOfType<PlayerController>() != null ? FindObjectOfType<PlayerController>().gameObject : null;
         }
         if (p != null)
         {
@@ -23,11 +23,11 @@ public class eNemy2 : MonoBehaviour
     {
         if (other == null) return;
 
-        if (other.gameObject.name == "player" || other.GetComponent<player>() != null)
+        if (other.gameObject.name == "player" || other.GetComponent<PlayerController>() != null)
         {
             if (Time.time < hitCd) return;
             hitCd = Time.time + 0.4f;
-            var g = FindObjectOfType<gm>();
+            var g = FindObjectOfType<GameManager>();
             if (g != null) g.hitPlayer(7);
         }
 
@@ -45,11 +45,11 @@ public class eNemy2 : MonoBehaviour
 
     void OnTriggerStay2D(Collider2D other)
     {
-        if (other != null && other.GetComponent<player>() != null)
+        if (other != null && other.GetComponent<PlayerController>() != null)
         {
             if (Time.time < hitCd) return;
             hitCd = Time.time + 0.55f;
-            var g = FindObjectOfType<gm>();
+            var g = FindObjectOfType<GameManager>();
             if (g != null) g.hitPlayer(3);
         }
     }
